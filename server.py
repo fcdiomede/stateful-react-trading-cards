@@ -26,31 +26,31 @@ DATA = {"cards":
             {
               "name": "Off-By-One",
               "skill": "climbing mountains",
-              "imgUrl": "/static/img/off-by-one.jpg"
+              "imgUrl": "/static/img/placeholder.png"
             },
 
             {
               "name": "Seed.py",
               "skill": "making curry dishes",
-              "imgUrl": "/static/img/seedpy.jpg"
+              "imgUrl": "/static/img/placeholder.png"
             },
 
             {
               "name": "Polymorphism",
               "skill": "costumes",
-              "imgUrl": "/static/img/polymorphism.jpg"
+              "imgUrl": "/static/img/placeholder.png"
             },
 
             {
               "name": "Short Stack Overflow",
               "skill": "ocean animal trivia",
-              "imgUrl": "/static/img/shortstack-overflow.jpg"
+              "imgUrl": "/static/img/placeholder.png"
             },
 
             {
               "name": "Merge",
               "skill": "bullet journaling",
-              "imgUrl": "/static/img/merge.jpg"
+              "imgUrl": "/static/img/placeholder.png"
             }]
 }
 
@@ -85,12 +85,19 @@ def get_cards_json():
 def add_card():
     """Add a new card to the DB."""
 
-    name = request.form.get('name')
-    skill = request.form.get('skill')
+    # unencode from JSON
+    data = request.get_json()
+    name = data.name
+    skill = data.skill
 
-    new_card = Card(name=name, skill=skill)
-    db.session.add(new_card)
-    db.session.commit()
+    # new_card = Card(name=name, skill=skill)
+    # db.session.add(new_card)
+    # db.session.commit()
+    # # DATA['cards'].append({
+    #         "name": name,
+    #         "skill": skill,
+    #         "imgUrl": "/static/img/placeholder.png"
+    #       })
 
     return jsonify({"success": True})
 
