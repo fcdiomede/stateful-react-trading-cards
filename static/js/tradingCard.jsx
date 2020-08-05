@@ -1,4 +1,4 @@
-function AddNewCard() {
+function AddNewCard(props) {
   // track state of input
   const [name, setName] = React.useState('');
   const [skill, setSkill] = React.useState('');
@@ -18,17 +18,20 @@ function AddNewCard() {
     fetch('/add-card', {method: 'POST', 
                         body: JSON.stringify(newCard), 
                         headers: {'Accept': 'application/json',
-                                  'Content-Type': 'application/json'}}
-      )
+                                  'Content-Type': 'application/json'}})
+    .then((res) => res.json())
+    .then((data) => props.updateCards([...props.cards, data]))
+    .then(() => {setName(''); setSkill('')});
   }
+
 
   //HTML for card form
   return (
       <div>
         <h2>Add New Trading Card</h2>
 
-        Name <input type="text" id="nameField" onChange={handleNameChange}></input>
-        Skill <input type="text" id="skillField" onChange={handleSkillChange}></input>
+        Name <input type="text" id="nameField" onChange={handleNameChange} value={name}></input>
+        Skill <input type="text" id="skillField" onChange={handleSkillChange} value={skill}></input>
         <button id="addCard" onClick={handleClick}>Add</button>
       </div>
     );
@@ -45,20 +48,11 @@ function TradingCard(props) {
   );
 }
 
-function TradingCardContainer() {
-
- const [cards, updateCards] = React.useState([]);
-
- React.useEffect(() => {
-   fetch('/cards.json')
-   .then((res) => res.json())
-   // the above json'ed response === data for below
-   .then((data) => updateCards(data))
- }, []);
+function TradingCardContainer(props) {
 
  const tradingCards = [];
 
- for (const currentCard of cards) {
+ for (const currentCard of props.cards) {
    tradingCards.push(
      <TradingCard
        key={currentCard.name}
@@ -76,11 +70,19 @@ function TradingCardContainer() {
 
 
 function App() {
+  const [cards, updateCards] = React.useState([]);
+
+ React.useEffect(() => {
+   fetch('/cards.json')
+   .then((res) => res.json())
+   // the above json'ed response === data for below
+   .then((data) => updateCards(data))
+ }, []);
+
  return (
    <div>
-     <AddNewCard />
-
-     <TradingCardContainer />
+     <AddNewCard updateCards={updateCards} cards={cards}/>
+     <TradingCardContainer cards={cards}/>
 
    </div>
    );

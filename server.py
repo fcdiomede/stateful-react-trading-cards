@@ -87,8 +87,17 @@ def add_card():
 
     # unencode from JSON
     data = request.get_json()
-    name = data.name
-    skill = data.skill
+    print(data)
+    name = data["name"]
+    skill = data["skill"]
+
+    new_card = {
+      "name": name,
+      "skill": skill,
+      "imgUrl": "/static/img/placeholder.png"
+    }
+
+    DATA["cards"].append(new_card)
 
     # new_card = Card(name=name, skill=skill)
     # db.session.add(new_card)
@@ -99,7 +108,7 @@ def add_card():
     #         "imgUrl": "/static/img/placeholder.png"
     #       })
 
-    return jsonify({"success": True})
+    return jsonify(new_card)
 
 @app.route("/cards-jquery")
 def show_cards_jquery():
