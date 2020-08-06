@@ -26,6 +26,7 @@ function AddNewCard(props) {
 
 
   //HTML for card form
+  //pass info of state to the input -> what the state thinks the value is is what the person sees
   return (
       <div>
         <h2>Add New Trading Card</h2>
